@@ -5,7 +5,8 @@
     <title>Codonate</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
     <link href="app-content/app.css" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css">
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <link href="assets/css/normalize.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -27,15 +28,14 @@
     <script src="app.js"></script>
     <script src="app-services/authentication.service.js"></script>
     <script src="app-services/flash.service.js"></script>
-
-    <!-- Real user service that uses an api -->
     <script src="app-services/user.service.js"></script> 
-
-
-    <script src="index.js"></script>
-
-    <script src="home/home.controller.js"></script>
-    <script src="login/login.controller.js"></script>
-    <script src="register/register.controller.js"></script>
+    <!-- Controllers -->
+    <script src="controllers/home.controller.js"></script>
+    <script src="controllers/login.controller.js"></script>
+    <script src="controllers/register.controller.js"></script>
+    <script src="controllers/request.controller.js"></script>
+    <script src="controllers/offer.controller.js"></script>
+    <!-- pretty JS -->
+    <script src="index.js"></script>    
 </body>
 </html>

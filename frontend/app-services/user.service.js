@@ -15,6 +15,7 @@
         service.Create = Create;
         service.Update = Update;
         service.Delete = Delete;
+        service.GetOffers = GetOffers;
 
         return service;
 
@@ -40,6 +41,26 @@
 
         function Delete(id) {
             return $http.delete('/api/users/' + id).then(handleSuccess, handleError('Error deleting user'));
+        }
+
+        function GetOffers() {
+            return $http.get('/api/offers').then(handleSuccess, handleError('No offers found'));
+        }
+
+        function DeleteOffer(id) {
+           return $http.delete('/api/offers/' + id ).then(handleSuccess, handleError('Error deleting'));
+        }
+
+        function CreateOffer(offer) {
+            return $http.post('/api/offers/' + offer).then(handleSuccess, handleError('No offers found'));
+        }
+
+        function GetRequest(item_name) {
+            return $http.get('/api/request/query?' + item_name).then(handleSuccess, handleError('No requests found'));
+        }
+
+        function CreateRequest(items) {
+            return $http.post('/api/request/query' + items).then(handleSuccess, handleError('No offers found'));
         }
 
         // private functions
