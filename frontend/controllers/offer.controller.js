@@ -12,7 +12,6 @@
         vm.createOffer = createOffer;
         vm.getOffers = getOffers;
         vm.deleteOffer = deleteOffer;
-        vm.error 
         vm.offers = [];
         
 
@@ -36,12 +35,13 @@
             vm.dataLoading = true;
             UserService.CreateOffer(vm.offer)
                 .then(function (response) {
-                    console.log(vm.offer);
-                    if (response.success) {
+                    console.log(response);
+                    if (response.status = "success") {
                         FlashService.Success('Offer created successfully', true);
                         console.log(response);
+                        vm.dataLoading = false;
                     } else {
-                        FlashService.Error(response.message);
+                        FlashService.Error('GAHHs');
                         vm.dataLoading = false;
                     }
                 });

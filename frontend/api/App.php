@@ -49,7 +49,8 @@
 			// TODO: Check that $type is valid
 			// TODO: Check that amount is a valid positive integer etc.
 			
-			return $this->database->createOffer($this->user['id'], $type, $amount, $city, $country);
+			$this->database->createOffer($this->user['id'], $type, $amount, $city, $country);
+			return ['status' => 'success'];
 		}
 		
 		/**
@@ -73,6 +74,10 @@
 				return ['status' => 'error', 'message' => 'Not logged in'];
 			}
 			
+			$offer = $this->database->getOffer($id);
+			if (!$offer) {
+				return ['status' => 'error', 'message' => 'Offer does not exist'];
+			}
 			if ($offer['requested_by']) {
 				return ['status' => 'error', 'message' => 'Offer is locked'];
 			}
