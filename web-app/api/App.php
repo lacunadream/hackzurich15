@@ -3,21 +3,29 @@
 	
 	class App {
 		
-		private $database;
-		private $user = null; // Will be an array of user information if valid session id is provided
+		const MAIL_HOSTNAME = 'ch01.veon.ch';
+		const MAIL_USERNAME = 'hackzurich@netinvasion-mail.ch';
+		const MAIL_PASSWORD = 'ojhfoq3123a!';
+		const MAIL_SENDER_ADDRESS = 'no-reply@codonate.waboodoo.ch';
+		const MAIL_SENDER_NAME = 'Codonate';
+		const MAIL_SUBJECT = 'Your donated items are needed!';
 		
-		public function __construct($sessionId) {
+		private $database;
+		private $user = null;
+		
+		public function __construct($email, $password) {
 			$this->loggedIn = false;
 			$this->database = new Database();
-			$this->database->connect('localhost', 'waboodoo', 'sHxWVH', 'dbwaboodoo_hackzuri'); // Hardcoding super important db credentials in code! Yay!!
+			$this->database->connect('localhost', 'waboodoo', 'sHxWVH', 'dbwaboodoo_hackzuri'); // Hardcoding super important db credentials! Yay!!
 			
-			if ($sessionId) {
-				$this->user = $this->database->getSessionUser($sessionId);
+			if ($email && $password) {
+				$this->user = $this->database->getUser($email, $password);
 			}
 		}
 		
 		/*public function test() {
-			return $this->database->createOffer(3, 'Doll', 9001, 'Paris', 'France');
+			$this->initMailer();
+			Mailer::sendMail(self::MAIL_SENDER_ADDRESS, 'rmy@rmy.ch', self::MAIL_SUBJECT, 'Hello World');
 		}*/
 		
 		public function registerOrganisation($email, $password, $organisationName, $description, $country, $city, $street, $zip, $phone, $website) {
@@ -34,18 +42,8 @@
 			return ['status' => 'success'];
 		}
 
-		public function login($email, $hashedPassword) {
-			if ($this->database->testCredentials($email, $hashedPassword)) {				
-				return $this->database->updateSession($email);
-			}
-			
-			return ['status' => 'error', 'message' => 'Invalid username or password'];
-		}
-		
 		public function createOffer($type, $amount, $city, $country) {
-			if ($this->user) {
-				$this->database->touchSession($this->user['email']);
-			} else {
+			if (!$this->user) {
 				return ['status' => 'error', 'message' => 'Not logged in'];
 			}
 			
@@ -59,9 +57,7 @@
 		 *	Returns the list of all the items the user is currently offering
 		 */
 		public function getOffers() {
-			if ($this->user) {
-				$this->database->touchSession($this->user['email']);
-			} else {
+			if (!$this->user) {
 				return ['status' => 'error', 'message' => 'Not logged in'];
 			}
 			
@@ -74,10 +70,12 @@
 		}
 		
 		public function deleteOffer($id) {
-			if ($this->user) {
-				$this->database->touchSession($this->user['email']);
-			} else {
+			if (!$this->user) {
 				return ['status' => 'error', 'message' => 'Not logged in'];
+			}
+			
+			if ($offer['requested_by']) {
+				return ['status' => 'error', 'message' => 'Offer is locked'];
 			}
 			
 			$this->database->deleteOffer($id);
@@ -86,15 +84,17 @@
 		}
 		
 		public function updateOffer($id, $changes) {
-			if ($this->user) {
-				$this->database->touchSession($this->user['email']);
-			} else {
+			if (!$this->user) {
 				return ['status' => 'error', 'message' => 'Not logged in'];
 			}
 			
 			$offer = $this->database->getOffer($id);
 			if (!$offer) {
 				return ['status' => 'error', 'message' => 'Offer does not exist'];
+			}
+			
+			if ($offer['requested_by']) {
+				return ['status' => 'error', 'message' => 'Offer is locked'];
 			}
 			
 			$type = isset($changes['type']) ? $changes['type'] : $offer['type'];
@@ -105,6 +105,85 @@
 			$this->database->updateOffer($id, $type, $amount, $city, $country);
 			
 			return ['status' => 'success'];
+		}
+		
+		
+		public function countAvailableItems($type) {
+			if (!$this->user) {
+				return ['status' => 'error', 'message' => 'Not logged in'];
+			} else if (!$this->user['verified']) {
+				return ['status' => 'error', 'message' => 'Only allowed for verified users'];
+			}
+			
+			return $this->database->countAvailableItems($type);
+		}
+		
+		public function requestItems($type, $amount, $message) {
+			if (!$this->user) {
+				return ['status' => 'error', 'message' => 'Not logged in'];
+			} else if (!$this->user['verified']) {
+				return ['status' => 'error', 'message' => 'Only allowed for verified users'];
+			}
+			
+			$usersToInform = $this->database->requestItems($this->user['id'], $type, $amount);
+			
+			$this->initMailer();
+			
+			foreach ($usersToInform as $userId => $requestedAmount) {
+				$user = $this->database->getUserById($userId);
+				if ($user) {
+					
+					$body = '<h1 style="font-size:1.1em">Codonate</h1>';
+					if ($user['type'] == 'organisation') {
+						$body .= 'Dear '.$user['organisation_name'];
+					} else {
+						$body .= 'Dear '.$user['first_name'].' '.$user['last_name'];
+					}
+					$body .= '<br><br>';
+					$body .= 'A request was made for your donated items.<br><br>';
+					$body .= '<table>';
+					$body .= '<tr><td>Item</td><td>'.$type.'</td></tr>';
+					$body .= '<tr><td>Amount</td><td>'.$requestedAmount.'</td></tr>';
+					$body .= '<tr><td>Requester</td><td>';
+					if ($this->user['type'] == 'organisation') {
+						$body .= $this->user['organisation_name'];
+					} else {
+						$body .= $this->user['first_name'].' '.$this->user['last_name'];
+					}
+					$body .= '<br>'.$this->user['description'];
+					$body .= '</td></tr>';
+					$body .= '<tr><td>Message</td><td>'.$message.'</td></tr>';
+					$body .= '<tr><td>Requester address</td><td>';
+					$body .= $this->user['street'].'<br>'.$this->user['zip'].' '.$this->user['city'].'<br>'.$this->user['country'].'<br>';
+					
+					if ($this->user['phone']) {
+						$body .= '<br>'.$this->user['phone'];
+					}
+					$body .= '<br>'.$this->user['email'];
+					if ($this->user['website']) {
+						$body .= '<br><a href="'.$this->user['website'].'">'.$this->user['website'].'</a>';
+					}
+					$body .= '</td></tr>';
+					
+					$body .= '</table><br>';
+					
+					$body .= 'Please send your items to the address above or contact the requester to arrange some other way of delivery.<br><br>';
+					$body .= 'Thank you for your effort.<br><br>';
+					$body .= 'Kind regards,<br>Codonate';
+					
+					Mailer::sendMail(self::MAIL_SENDER_ADDRESS, self::MAIL_SENDER_NAME, $user['email'], self::MAIL_SUBJECT, $body);
+				}
+			}
+			
+			return [
+				'involved_users' => count($usersToInform),
+				'reserved_amount' => array_sum($usersToInform)
+			];
+		}
+		
+		private function initMailer() {
+			require 'Mailer.php';
+			Mailer::init(self::MAIL_HOSTNAME, self::MAIL_USERNAME, self::MAIL_PASSWORD);
 		}
 		
 	}
