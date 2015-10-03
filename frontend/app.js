@@ -11,31 +11,25 @@
         $routeProvider
             .when('/', {
                 controller: 'HomeController',
-                templateUrl: 'views/home.view.html',
+                templateUrl: 'home/home.view.html',
                 controllerAs: 'vm'
             })
 
             .when('/login', {
                 controller: 'LoginController',
-                templateUrl: 'views/login.view2.html',
+                templateUrl: 'login/login.view2.html',
                 controllerAs: 'vm'
             })
 
             .when('/register', {
                 controller: 'RegisterController',
-                templateUrl: 'views/register.view.html',
+                templateUrl: 'register/register.view.html',
                 controllerAs: 'vm'
             })
 
             .when('/offer', {
                 controller: 'OfferController', 
-                templateUrl: 'views/offer.view.html', 
-                controllerAs: 'vm'
-            })
-
-            .when('/request', {
-                controller: 'RequestController', 
-                templateUrl: 'views/request.view.html', 
+                templateUrl: 'offer/offer.view.html', 
                 controllerAs: 'vm'
             })
 
