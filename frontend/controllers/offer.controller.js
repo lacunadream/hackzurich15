@@ -11,7 +11,9 @@
 
         vm.createOffer = createOffer;
         vm.getOffers = getOffers;
+        vm.deleteOffer = deleteOffer;
         vm.offers = [];
+        
 
         initController();
 
@@ -24,11 +26,10 @@
             UserService.GetOffers() 
                 .then(function (offers) {
                     vm.offers = offers; 
-                    console.log(offers);
                     console.log(vm.offers);
                 });
-            }
-         }
+            
+        }
 
         function createOffer() {
             vm.dataLoading = true;
@@ -43,15 +44,19 @@
                 });
         }
 
-         function deleteOffer() {
-            UserService.DeleteOffer(vm.id)
+         function deleteOffer(id) {
+            UserService.DeleteOffer({"id":id})
                 .then(function (response) {
-                    if (response.success) {
+                    if (response.status = "success") {
                         FlashService.Success('Deletion successful', true);
+                        console.log('yay')
+                        console.log(response)
                     } else {
                         FlashService.Error(response.message);
+                        console.log('nay')
                     }
-                })
+                });
+            }
          }
 
 })();

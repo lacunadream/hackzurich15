@@ -16,6 +16,7 @@
         service.Update = Update;
         service.Delete = Delete;
         service.GetOffers = GetOffers;
+        service.DeleteOffer = DeleteOffer; 
 
         return service;
 
@@ -32,7 +33,7 @@
         }
 
         function Create(user) {
-            return $http.post('/api/users', user).then(handleSuccess, handleError('Error creating user'));
+            return $http.post('/api/register/individual', user).then(handleSuccess, handleError('Error creating user'));
         }
 
         function Update(user) {
@@ -48,7 +49,7 @@
         }
 
         function DeleteOffer(id) {
-           return $http.delete('/api/offers/' + id ).then(handleSuccess, handleError('Error deleting'));
+            return $http.post('/api/offers/delete', id).then(handleSuccess, handleError('Error deleting offer'));
         }
 
         function CreateOffer(offer) {
