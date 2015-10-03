@@ -1,7 +1,5 @@
 <?php
 	class Database { // TODO: Re-implement this, as this will not scale well
-	
-		const SESSION_MAX_AGE = 3600; // 1 hour timeout
 		
 		private $mysqli;
 		
@@ -19,7 +17,7 @@
 		
 		
 		
-		/////////////////// - USERS & SESSIONS - ///////////////////
+		/////////////////// - USERS - ///////////////////
 		
 		public function createUser($type, $email, $password, $firstName, $lastName, $organisationName, $description, $country, $city, $street, $zip, $phone, $website) {
 			$hashedPassword = sha1($password);
@@ -46,31 +44,30 @@
 			return false;
 		}
 		
-		public function getSessionUser($sessionId) {
-			$result = $this->mysqli->query("SELECT * FROM `users` WHERE `session_id` = '".$this->mysqli->real_escape_string($sessionId)."' AND  `session_timestamp` + ".self::SESSION_MAX_AGE." > NOW()");
+		public function getUser($email, $password) {
+			$hashedPassword = self::hashPassword($password);
+			
+			$statement = $this->mysqli->prepare("SELECT * FROM `users` WHERE `email` = ? AND `hashed_password` = ?");
+			$statement->bind_param('ss', $email, $hashedPassword);
+			$statement->execute();
+			$result = $statement->get_result();
+			
 			if ($user = $result->fetch_assoc()) {
 				return $user;
 			}
 			return [];
 		}
 		
-		public function updateSession($email) {
-			$sessionId = sha1($email.rand(100000,999999)); // TODO: Generate better session keys
-			
-			$statement = $this->mysqli->prepare("UPDATE `users` SET `session_id` = ?, `session_timestamp` = NOW() WHERE `email` = ?");
-			$statement->bind_param('ss', $sessionId, $email);
+		public function getUserById($userId) {
+			$statement = $this->mysqli->prepare("SELECT * FROM `users` WHERE `id` = ?");
+			$statement->bind_param('s', $userId);
 			$statement->execute();
+			$result = $statement->get_result();
 			
-			return $sessionId;
-		}
-		
-		/**
-		 *	Updates the user's session timestamp.
-		 */
-		public function touchSession($email) {
-			$statement = $this->mysqli->prepare("UPDATE `users` SET `session_timestamp` = NOW() WHERE `email` = ?");
-			$statement->bind_param('s', $email);
-			$statement->execute();
+			if ($user = $result->fetch_assoc()) {
+				return $user;
+			}
+			return [];
 		}
 		
 		
@@ -124,6 +121,84 @@
 			$statement = $this->mysqli->prepare("UPDATE `offers` SET `type` = ?, `amount` = ?, `city` = ?, `country` = ? WHERE `id` = ?");
 			$statement->bind_param('sdssd', $type, $amount, $city, $country, $offerId);
 			$statement->execute();
+		}
+		
+		
+		
+		public function countAvailableItems($type) {
+			$statement = $this->mysqli->prepare("SELECT COALESCE(SUM(`amount`), 0) as `amount` FROM `offers` WHERE `type` = ?");
+			$statement->bind_param('s', $type);
+			$statement->execute();
+			$result = $statement->get_result();
+			if ($offer = $result->fetch_assoc()) {
+				return intval($offer['amount']);
+			}
+			return 0;
+		}
+		
+		public function requestItems($userId, $type, $amount) { // TODO: This should be done as a transaction
+			
+			$amountSoFar = 0;
+			$usersToInform = []; // Key = user id, value = amount of items requested
+			
+			$i = 0;
+			while ($amountSoFar < $amount && $i < 10) {
+				$i++;
+				$statement = $this->mysqli->prepare("SELECT * FROM `offers` WHERE `type` = ? AND `requested_by` IS NULL ORDER BY `amount` DESC LIMIT 10");
+				$statement->bind_param('s', $type);
+				$statement->execute();
+				
+				$result = $statement->get_result();
+				
+				if ($result->num_rows == 0) {
+					break;
+				}
+				
+				while (($offer = $result->fetch_assoc()) && $amountSoFar < $amount) {
+					
+					if (!isset($usersToInform[$offer['user']])) {
+						$usersToInform[$offer['user']] = 0;
+					}
+					
+					if ($amountSoFar + $offer['amount'] > $amount) {
+						
+						$diff = $amount - $amountSoFar;
+						$leftOver = $offer['amount'] - $diff;
+						
+						// Split the offer in two parts (one requested and one still free)
+						$statement2 = $this->mysqli->prepare("INSERT INTO `offers` (`type`, `amount`, `city`, `country`, `user`, `requested_by`) VALUES (?, ?, ?, ?, ?, ?);");
+						$statement2->bind_param('ssssdd', $offer['type'], $diff, $offer['city'], $offer['country'], $offer['user'], $userId);
+						$statement2->execute();
+						
+						
+						$statement2 = $this->mysqli->prepare("UPDATE `offers` SET `amount` = ? WHERE `id` = ?");
+						$statement2->bind_param('dd', $leftOver, $offer['id']);
+						$statement2->execute();
+						
+						$usersToInform[$offer['user']] += $diff;
+						$amountSoFar = $amount;
+					} else {
+						
+						// Mark the offer as requested
+						$statement2 = $this->mysqli->prepare("UPDATE `offers` SET `requested_by` = ? WHERE `id` = ?");
+						$statement2->bind_param('dd', $userId, $offer['id']);
+						$statement2->execute();
+						
+						
+						$usersToInform[$offer['user']] += $offer['amount'];
+						$amountSoFar += $offer['amount'];
+					}
+				}
+			}
+			
+			return $usersToInform;
+		}
+		
+		
+		
+		
+		private static function hashPassword($password) {
+			return sha1($password); // TODO: Use a better (and salted!) hashing function
 		}
 		
 	}

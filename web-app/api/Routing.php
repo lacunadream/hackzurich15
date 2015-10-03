@@ -5,8 +5,8 @@
 		
 		private $app;
 		
-		public function __construct($sessionId) {
-			$this->app = new App($sessionId);
+		public function __construct($email, $password) {
+			$this->app = new App($email, $password);
 		}
 		
 		public function route($method, $path, $args) {
@@ -63,6 +63,17 @@
 				}
 				
 			}
+			
+			// GET /query
+			if ($method == 'GET' && $path == ['query']) {
+				return $this->app->countAvailableItems($args['type']);
+			}
+			
+			// POST /request
+			if ($method == 'POST' && $path == ['request']) {
+				return $this->app->requestItems($args['type'], $args['amount'], $args['message']);
+			}
+			
 			
 			return ['status' => 'error', 'message' => 'Invalid request'];
 		}
