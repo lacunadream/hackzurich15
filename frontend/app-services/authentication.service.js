@@ -27,7 +27,7 @@
                     } else {
                         console.log(x)
                         console.log(x.data)
-                        response = {success:false, message: 'LOL'}
+                        response = {success:false, message: 'You entered an incorrect password. Please try again. '}
                     }
                     callback(response);
                 })
