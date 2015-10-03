@@ -17,6 +17,7 @@
         service.Delete = Delete;
         service.GetOffers = GetOffers;
         service.DeleteOffer = DeleteOffer; 
+        service.CreateOffer = CreateOffer;
 
         return service;
 
@@ -53,7 +54,7 @@
         }
 
         function CreateOffer(offer) {
-            return $http.post('/api/offers/' + offer).then(handleSuccess, handleError('No offers found'));
+            return $http.post('/api/offers/create', offer).then(handleSuccess, handleError('No offers found'));
         }
 
         function GetRequest(item_name) {

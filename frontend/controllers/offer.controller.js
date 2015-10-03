@@ -12,6 +12,7 @@
         vm.createOffer = createOffer;
         vm.getOffers = getOffers;
         vm.deleteOffer = deleteOffer;
+        vm.error 
         vm.offers = [];
         
 
