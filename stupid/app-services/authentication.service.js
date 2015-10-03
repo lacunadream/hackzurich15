@@ -16,28 +16,38 @@
         return service;
 
         function Login(username, password, callback) {
+            console.log({username,password});
+            var response
+            $http.post('/api/login', {email:username,password:password})
+                .then(function (x) {
+                    if (x.data == "true") {
+                        console.log(x)
+                        console.log(x.data)
+                        response = {success:true}
+                    } else {
+                        console.log(x)
+                        console.log(x.data)
+                        response = {success:false, message: 'LOL'}
+                    }
+                    callback(response);
+                })
+                // .success(function (xx) {
+                //     console.log(xx);
+                //     response = {success: xx}
+                //     callback(response);
+                //     console.log(response);
+                // });
 
-            // /* Dummy authentication for testing, uses $timeout to simulate api call
-            //  ----------------------------------------------*/
-            // $timeout(function () {
-            //     var response;
-            //     UserService.GetByUsername(username)
-            //         .then(function (user) {
-            //             if (user !== null && user.password === password) {
-            //                 response = { success: true };
-            //             } else {
-            //                 response = { success: false, message: 'Username or password is incorrect' };
-            //             }
-            //             callback(response);
-            //         });
-            // }, 1000);
 
-            $http.post('/api/login', {username,password})
-                .then(function (response) {
-                    console.log(response)
-                }), response = { success: false, message: 'Username or password is incorrect' };
-                }
-                callback(response);
+                // .then(function (response) {
+                //     console.log(response);
+                //     response = { success: true };
+                //     console.log(response);
+                // }), function(response) {
+                //     console.log(response);
+                //     response = { success: true }
+                // };
+                // callback(response)
 
         }
 
@@ -51,7 +61,7 @@
                 }
             };
 
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; 
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
             $cookieStore.put('globals', $rootScope.globals);
         }
 

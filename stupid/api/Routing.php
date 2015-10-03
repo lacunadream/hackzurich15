@@ -5,25 +5,15 @@
 		
 		private $app;
 		
-		public function __construct($sessionId) {
-			$this->app = new App($sessionId);
+		public function __construct($email, $password) {
+			$this->app = new App($email, $password);
 		}
 		
 		public function route($method, $path, $args) {
 			
-			// GET /test
-			if ($method == 'GET' && $path == ['test']) {
-				return $this->app->test();
-			}
-			
-			// POST /login
+			// POST /login	// TODO: This should be GET?
 			if ($method == 'POST' && $path == ['login']) {
-				return $this->app->login($args['email'], $args['hashed_password']);
-			}
-			
-			// POST /logout
-			if ($method == 'POST' && $path == ['logout']) {
-				return $this->app->logout();
+				return $this->app->checkCredentials($args['email'], $args['password']);
 			}
 			
 			// POST /register/organisation
@@ -65,12 +55,12 @@
 			}
 			
 			// GET /query
-			if ($method == 'GET' $path == ['query']) {
-				return $this->app->countAvailableItems($args['type']);
+			if ($method == 'GET' && $path == ['query'] && isset($_GET['type'])) {
+				return $this->app->countAvailableItems($_GET['type']);
 			}
 			
-			// POST /request/create
-			if ($method == 'POST' && $path == ['request', 'create']) {
+			// POST /request
+			if ($method == 'POST' && $path == ['request']) {
 				return $this->app->requestItems($args['type'], $args['amount'], $args['message']);
 			}
 			
