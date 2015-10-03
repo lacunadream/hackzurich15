@@ -48,6 +48,18 @@
 			
 			// TODO: Check that $type is valid
 			// TODO: Check that amount is a valid positive integer etc.
+			if (!in_array($type, [
+				'Bandages',
+				'Blankets',
+				'Shoes',
+				'Toys',
+				'Jackets',
+				'Trousers',
+				'Backpack',
+				'First Aid Kit'
+			])) {
+				return ['status' => 'error', 'message' => 'Invalid item type'];
+			}
 			
 			$this->database->createOffer($this->user['id'], $type, $amount, $city, $country);
 			return ['status' => 'success'];

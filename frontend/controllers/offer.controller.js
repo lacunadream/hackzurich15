@@ -37,11 +37,11 @@
                 .then(function (response) {
                     console.log(response);
                     if (response.status == "success") {
-                        FlashService.Success('Offer created successfully', true);
+                        FlashService.Success('Your donation has been received succesfully. Thank you for your donation.', true);
                         console.log(response);
                         vm.dataLoading = false;
                     } else {
-                        FlashService.Error('GAHHs');
+                        FlashService.Error('An error occurred.');
                         vm.dataLoading = false;
                     }
                 });
