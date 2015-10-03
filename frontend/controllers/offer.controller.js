@@ -36,7 +36,7 @@
             UserService.CreateOffer(vm.offer)
                 .then(function (response) {
                     console.log(response);
-                    if (response.status = "success") {
+                    if (response.status == "success") {
                         FlashService.Success('Offer created successfully', true);
                         console.log(response);
                         vm.dataLoading = false;
@@ -50,7 +50,7 @@
          function deleteOffer(id) {
             UserService.DeleteOffer({"id":id})
                 .then(function (response) {
-                    if (response.status = "success") {
+                    if (response.status == "success") {
                         FlashService.Success('Deletion successful', true);
                         console.log('yay')
                         console.log(response)
