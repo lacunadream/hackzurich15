@@ -27,7 +27,7 @@
                 controllerAs: 'vm'
             })
 
-            .when('/offer', {
+            .when('/offers', {
                 controller: 'OfferController', 
                 templateUrl: 'views/offer.view.html', 
                 controllerAs: 'vm'
@@ -36,6 +36,12 @@
             .when('/request', {
                 controller: 'RequestController', 
                 templateUrl: 'views/request.view.html', 
+                controllerAs: 'vm'
+            })
+
+            .when('/homepage', {
+                controller: 'OfferController', 
+                templateUrl: 'views/offer.view.html', 
                 controllerAs: 'vm'
             })
 
@@ -52,10 +58,13 @@
 
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
             // redirect to login page if not logged in and trying to access a restricted page
-            var restrictedPage = $.inArray($location.path(), ['/login', '/register']) === -1;
-            var loggedIn = $rootScope.globals.currentUser;
-            if (restrictedPage && !loggedIn) {
+            var restrictedPage = $.inArray($location.path(), ['', '/', '/login', '/register']) === -1;
+            var restrictedPage2 = $.inArray($location.path(), ['', '/']) === -1;
+            var loggedIn = $rootScope.globals.currentUser
+;            if (restrictedPage && !loggedIn) {
                 $location.path('/login');
+            } else if (!restrictedPage2 && loggedIn){
+                $location.path('/homepage');
             }
         });
     }

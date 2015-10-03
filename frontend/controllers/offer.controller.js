@@ -35,8 +35,10 @@
             vm.dataLoading = true;
             UserService.CreateOffer(vm.offer)
                 .then(function (response) {
+                    console.log(vm.offer);
                     if (response.success) {
                         FlashService.Success('Offer created successfully', true);
+                        console.log(response);
                     } else {
                         FlashService.Error(response.message);
                         vm.dataLoading = false;
@@ -51,6 +53,7 @@
                         FlashService.Success('Deletion successful', true);
                         console.log('yay')
                         console.log(response)
+                        $location.path('/offers');
                     } else {
                         FlashService.Error(response.message);
                         console.log('nay')
