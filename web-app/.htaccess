@@ -1,6 +1,0 @@
-RewriteEngine on
-RewriteBase /
-
-RewriteCond %{REQUEST_URI} /api/
-RewriteCond %{ENV:REDIRECT_STATUS} !=200
-RewriteRule .* /api/index.php [L]
