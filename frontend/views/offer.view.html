@@ -7,8 +7,8 @@
 			<select name="type" id="type" class="form-control" ng-model="vm.offer.type" required>
 			<option value="">Select item</option>
 				<option value="Scholarships">Scholarships</option>
-				<option value="German_Lessons">German Lessons</option>
-				<option value="English_Lessons">English Lessons</option>
+				<option value="German Lessons">German Lessons</option>
+				<option value="English Lessons">English Lessons</option>
 				<option value="Bandages">Bandages</option>
 				<option value="Blankets">Blankets</option>
 				<option value="Shoes">Shoes</option>
@@ -320,4 +320,5 @@
 	</tbody>
 </table>
 <br>
+<div ng-show="vm.verified" class="centered-button floating"><a href="#/request" class="btn btn-primary">Request Items</a></div>
 <div class="centered-button floating"><a href="#/login" class="btn btn-primary">Logout</a></div>

@@ -5,10 +5,12 @@
         .module('app')
         .controller('OfferController', OfferController);
 
-    OfferController.$inject = ['UserService', '$location', 'FlashService'];
-    function OfferController(UserService, $location, FlashService) {
+    OfferController.$inject = ['UserService', '$location', 'FlashService', '$rootScope'];
+    function OfferController(UserService, $location, FlashService, $rootScope) {
         var vm = this;
 
+
+        vm.verified = $rootScope.globals.currentUser.verified
         vm.createOffer = createOffer;
         vm.getOffers = getOffers;
         vm.deleteOffer = deleteOffer;
@@ -36,6 +38,7 @@
             UserService.CreateOffer(vm.offer)
                 .then(function (response) {
                     console.log(response);
+                    console.log(vm.offer);
                     if (response.status == "success") {
                         FlashService.Success('Your donation has been received succesfully. Thank you for your donation.', true);
                         console.log(response);
