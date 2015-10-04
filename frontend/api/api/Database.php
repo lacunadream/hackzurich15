@@ -1,7 +1,4 @@
 <?php
-	/**
-	 *	Provides the interface to the MySQL database.
-	 */
 	class Database { // TODO: Re-implement this, as this will not scale well
 		
 		private $mysqli;
@@ -13,7 +10,7 @@
 			}
 		}
 		
-		public function disconnect() { // TODO: Actually use this at some point. Why did we implement this?
+		public function disconnect() {
 			$this->mysqli->close();
 			$this->mysqli = null;
 		}
@@ -208,7 +205,7 @@
 		
 		
 		private static function hashPassword($password) {
-			return password_hash($password, PASSWORD_BCRYPT); // Changed to stronger bcrypt
+			return sha1($password); // TODO: Use a better (and salted!) hashing function
 		}
 		
 	}

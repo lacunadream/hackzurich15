@@ -27,6 +27,10 @@
 			return $this->database->getUser($email, $password) != null;
 		}
 		
+		public function isVerified() {
+			return $this->user && $this->user['verified'];
+		}
+		
 		public function registerOrganisation($email, $password, $organisationName, $description, $country, $city, $street, $zip, $phone, $website) {
 			// TODO: Check if email address is not yet in use
 			$this->database->createUser('organisation', $email, $password, null, null, $organisationName, $description, $country, $city, $street, $zip, $phone, $website);
@@ -193,8 +197,7 @@
 			
 			return [
 				'involved_users' => count($usersToInform),
-				'reserved_amount' => array_sum($usersToInform),
-				'status' => 'success'
+				'reserved_amount' => array_sum($usersToInform)
 			];
 		}
 		

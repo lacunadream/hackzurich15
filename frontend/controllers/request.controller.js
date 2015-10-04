@@ -8,23 +8,24 @@
     RequestController.$inject = ['UserService', '$location', '$rootScope', 'FlashService'];
     function RequestController(UserService, $location, $rootScope, FlashService) {
         var vm = this;
+        vm.getQuery = getQuery;
+        vm.numbers = 
+        vm.state = false
 
-
-
-        initController();
-
-
-        function initController() {
-            getOffers();
-        }
-
-        function getOffers() {
-            UserService.GetOffers($rootScope.globals.currentUser.username) 
-                .then(function (offers) {
-                    vm.offers = offers; 
+        function getQuery() {
+            // var req = encodeURI(vm.itemtype);
+            // console.log('a' + req)
+            UserService.GetQuery(vm.itemtype) 
+                .then(function (response) {
+                    vm.numbers = response;
+                    vm.state = true; 
+                    vm.itemtype2 = vm.itemtype;
+                    console.log(response);
+                    console.log(vm.numbers);
+                    console.log(vm.itemtype);
                 });
             }
-         }
+         
 
         function createOffer() {
             vm.dataLoading = true;
@@ -48,6 +49,7 @@
                         FlashService.Error(response.message);
                     }
                 })
+            }
          }
 
 })();

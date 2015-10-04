@@ -5,8 +5,8 @@
         .module('app')
         .controller('OfferController', OfferController);
 
-    OfferController.$inject = ['UserService', '$location', '$rootScope', 'FlashService'];
-    function OfferController(UserService, $location, $rootScope, FlashService) {
+    OfferController.$inject = ['UserService', '$location', 'FlashService'];
+    function OfferController(UserService, $location, FlashService) {
         var vm = this;
 
         vm.createOffer = createOffer;

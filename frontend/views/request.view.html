@@ -1,0 +1,33 @@
+<h2 class="in-app">Check Item Availability</h2>
+<div class="col-md-6 col-md-offset-3" style="margin-bottom:3em">
+	<div ng-show="vm.error" class="alert alert-danger">{{vm.error}}</div>
+	<form name="form" ng-submit="vm.getQuery()" role="form">
+		<div class="form-group" ng-class="{ 'has-error': form.itemtype.$dirty && form.itemtype.$error.required }">
+			<label for="itemtype">Item</label>
+			<select name="type" id="itemtype" class="form-control" ng-model="vm.itemtype" required>
+			<option value="">Select item</option>
+				<option value="Bandages">Bandages</option>
+				<option value="Blankets">Blankets</option>
+				<option value="Shoes">Shoes</option>
+				<option value="Toys">Toys</option>
+				<option value="Jackets">Jackets</option>
+				<option value="Trousers">Trousers</option>
+				<option value="Backpacks">Backpacks</option>
+				<option value="First Aid Kits">First Aid Kits</option>
+			</select>
+			<span ng-show="form.itemtype.$dirty && form.itemtype.$error.required" class="help-block">Item selection is required</span>
+		</div>
+		<div class="form-actions centered-button">
+			<button type="submit" ng-disabled="form.$invalid || vm.dataLoading" class="btn btn-primary">Check</button>
+			<img ng-if="vm.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+		</div>
+	</form>
+	<div ng-show="vm.state" style="text-align:center">
+		<br>
+		<span>There are {{vm.numbers}} {{vm.itemtype2}} available at this moment.</span>
+	</div>
+</div>
+
+<!-- <h2 class="in-app">My donations</h2> -->
+
+<div class="centered-button floating"><a href="#/login" class="btn btn-primary">Logout</a></div>

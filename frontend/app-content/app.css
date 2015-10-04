@@ -1,1 +1,48 @@
-﻿
+﻿html {
+	overflow-y: scroll;
+}
+body {
+	background-image: url('/assets/img/bg.png');
+	background-repeat: no-repeat;
+	background-size: 100% 418px;
+	background-position: center top;
+}
+.jumbotron {
+	background: transparent;
+}
+.jumbotron h1 a {
+	text-decoration: none;
+}
+.jumbotron h1 {
+	text-align: center;
+	font-size: 2em;
+}
+.jumbotron h1 a img {
+	max-width: 100%;
+}
+.jumbotron h2.in-app {
+	text-align: center;
+	font-size: 1.8em;
+	margin-top: 2em;
+	margin-bottom: 1em;
+	float: left;
+	display: block;
+	width: 100%;
+}
+
+.centered-button {
+	text-align: center;
+}
+.floating {
+	float: left;
+	width: 100%;
+	display: block;
+}
+
+.jumbotron h2 {
+	margin-top: 1em;
+	font-size: 1.4em;
+}
+.jumbotron p {
+	font-size: 1.2em;
+}
