@@ -54,3 +54,8 @@ body {
 tr.blocked {
 	background-color: #F0F0F0;
 }
+
+.p20p20 {
+	padding-top: 20px; 
+	padding-bottom: 20px;
+}
