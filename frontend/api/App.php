@@ -49,18 +49,6 @@
 			
 			// TODO: Check that $type is valid
 			// TODO: Check that amount is a valid positive integer etc.
-			if (!in_array($type, [
-				'Bandages',
-				'Blankets',
-				'Shoes',
-				'Toys',
-				'Jackets',
-				'Trousers',
-				'Backpack',
-				'First Aid Kit'
-			])) {
-				return ['status' => 'error', 'message' => 'Invalid item type'];
-			}
 			
 			$this->database->createOffer($this->user['id'], $type, $amount, $city, $country);
 			return ['status' => 'success'];
@@ -170,7 +158,7 @@
 				$user = $this->database->getUserById($userId);
 				if ($user) {
 					
-					$body = '<h1 style="font-size:1.1em">Codonation</h1>';
+					$body = '<img src="http://codonation.waboodoo.ch/assets/img/mail_logo.png" alt="Codonation"><br><br>';
 					if ($user['type'] == 'organisation') {
 						$body .= 'Dear '.$user['organisation_name'];
 					} else {
@@ -178,7 +166,7 @@
 					}
 					$body .= '<br><br>';
 					$body .= 'A request was made for your donated items.<br><br>';
-					$body .= '<table>';
+					$body .= '<table cellpadding="3">';
 					$body .= '<tr><td>Item</td><td>'.$type.'</td></tr>';
 					$body .= '<tr><td>Amount</td><td>'.$requestedAmount.'</td></tr>';
 					$body .= '<tr><td>Requester</td><td>';
@@ -189,7 +177,7 @@
 					}
 					$body .= '<br>'.$this->user['description'];
 					$body .= '</td></tr>';
-					$body .= '<tr><td>Message</td><td>'.$message.'</td></tr>';
+					$body .= '<tr><td><br>Message</td><td><br><b>'.$message.'</b><br><br></td></tr>';
 					$body .= '<tr><td>Requester address</td><td>';
 					$body .= $this->user['street'].'<br>'.$this->user['zip'].' '.$this->user['city'].'<br>'.$this->user['country'].'<br>';
 					

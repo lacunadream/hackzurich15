@@ -89,7 +89,7 @@
 		 *	Returns the offers of a given user (by user id)
 		 */
 		public function getOffers($userId) {
-			$statement = $this->mysqli->prepare("SELECT * FROM `offers` WHERE `user` = ?");
+			$statement = $this->mysqli->prepare("SELECT * FROM `offers` WHERE `user` = ? ORDER BY `id` DESC"); // TODO: This is where I would order by date... IF I HAD ONE!
 			$statement->bind_param('d', $userId);
 			$statement->execute();
 			$result = $statement->get_result();
