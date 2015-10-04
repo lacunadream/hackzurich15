@@ -1,5 +1,5 @@
 # hackzurich15
-== CODONATION == 
+## CODONATION ##
 
 Codonation is an entry for hackzurich115.
 
