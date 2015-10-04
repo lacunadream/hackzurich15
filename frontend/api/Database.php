@@ -136,7 +136,7 @@
 		
 		
 		public function countAvailableItems($type) {
-			$statement = $this->mysqli->prepare("SELECT COALESCE(SUM(`amount`), 0) as `amount` FROM `offers` WHERE `type` = ?");
+			$statement = $this->mysqli->prepare("SELECT COALESCE(SUM(`amount`), 0) as `amount` FROM `offers` WHERE `type` = ? AND `requested_by` IS NULL");
 			$statement->bind_param('s', $type);
 			$statement->execute();
 			$result = $statement->get_result();

@@ -24,7 +24,8 @@
 		}
 		
 		public function checkCredentials($email, $password) {
-			return $this->database->getUser($email, $password) != null;
+			$user = $this->database->getUser($email, $password);
+			return ['status' => 'success', 'valid' => ($user != null), 'verified' => ($user != null && $user['verified'])];
 		}
 		
 		public function registerOrganisation($email, $password, $organisationName, $description, $country, $city, $street, $zip, $phone, $website) {
@@ -86,8 +87,11 @@
 						$name = $requester['first_name'].' '.$requester['last_name'];
 					}
 					
+					$offer['email'] = $requester['email'];
 					if (!empty($requester['website'])) {
 						$offer['website'] = $requester['website'];
+					} else {
+						$offer['website'] = null;
 					}
 					
 					$offer['requested_by'] = $name;

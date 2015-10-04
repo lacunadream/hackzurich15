@@ -2,7 +2,7 @@
 <html ng-app="app">
 <head>
     <meta charset="utf-8" />
-    <title>Codonate</title>
+    <title>Codonation</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
     <link href="app-content/app.css" rel="stylesheet" />
     <link href="assets/css/style.css" rel="stylesheet" />
@@ -11,8 +11,9 @@
 <body>
 
     <div class="jumbotron">
+		<h1><a href="/"><img src="assets/img/logo.png" alt="Codonation - our gifts for better lives" title="Codonation - our gifts for better lifes"></a></h1>
         <div class="container">
-            <div class="col-sm-8 col-sm-offset-2">
+            <div class="col-sm-10 col-sm-offset-1">
                 <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
                 <div ng-view></div>
             </div>
@@ -35,6 +36,7 @@
     <script src="controllers/register.controller.js"></script>
     <script src="controllers/request.controller.js"></script>
     <script src="controllers/offer.controller.js"></script>
+    <script src="controllers/registerorganisation.controller.js"></script>
     <!-- pretty JS -->
     <script src="index.js"></script>    
 </body>

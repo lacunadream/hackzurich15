@@ -8,6 +8,7 @@
     AuthenticationService.$inject = ['$http', '$cookieStore', '$rootScope', '$timeout', 'UserService'];
     function AuthenticationService($http, $cookieStore, $rootScope, $timeout, UserService) {
         var service = {};
+        var call = "";
 
         service.Login = Login;
         service.SetCredentials = SetCredentials;
@@ -16,14 +17,14 @@
         return service;
 
         function Login(username, password, callback) {
-            console.log({username,password});
+            //console.log({username,password});
             var response
             $http.post('/api/login', {email:username,password:password})
                 .then(function (x) {
-                    if (x.data == "true") {
-                        console.log(x)
-                        console.log(x.data)
-                        response = {success:true}
+                    if (x.data.valid == true) {
+                        //console.log(x.data.verified)
+                        response = {success:true, verified:x.data.verified}
+                        //console.log(response)
                     } else {
                         console.log(x)
                         console.log(x.data)
@@ -51,16 +52,17 @@
 
         }
 
-        function SetCredentials(username, password) {
+        function SetCredentials(username, password, call) {
             var authdata = Base64.encode(username + ':' + password);
 
             $rootScope.globals = {
                 currentUser: {
                     username: username,
-                    authdata: authdata
+                    authdata: authdata,
+                    verified: call
                 }
             };
-
+            console.log($rootScope.globals);
             $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
             $cookieStore.put('globals', $rootScope.globals);
         }
