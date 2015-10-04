@@ -81,10 +81,16 @@
 					$requester = $this->database->getUserById($offer['requested_by']);
 					
 					if ($requester['type'] == 'organisation') {
-						$offer['requested_by'] = $requester['organisation_name'];
+						$name = $requester['organisation_name'];
 					} else {
-						$offer['requested_by'] = $requester['first_name'].' '.$requester['last_name'];
+						$name = $requester['first_name'].' '.$requester['last_name'];
 					}
+					
+					if (!empty($requester['website'])) {
+						$offer['website'] = $requester['website'];
+					}
+					
+					$offer['requested_by'] = $name;
 				}
 				
 			}

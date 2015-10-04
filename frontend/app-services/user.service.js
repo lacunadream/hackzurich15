@@ -17,6 +17,7 @@
         service.DeleteOffer = DeleteOffer; 
         service.CreateOffer = CreateOffer;
         service.GetQuery = GetQuery;
+        service.CreateRequest = CreateRequest;
 
         return service;
 
@@ -52,12 +53,12 @@
             return $http.get('/api/request/query?' + item_name).then(handleSuccess, handleError('No requests found'));
         }
 
-        function CreateRequest(items) {
-            return $http.post('/api/request/query' + items).then(handleSuccess, handleError('No offers found'));
-        }
-
         function GetQuery(type) {
             return $http.get('/api/query?type=' + type).then(handleSuccess, handleError('No offers found'));
+        }
+
+        function CreateRequest(request) {
+            return $http.post('/api/request', request).then(handleSuccess, handleError('No offers found'));
         }
 
         // private functions

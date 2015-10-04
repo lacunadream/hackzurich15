@@ -9,8 +9,10 @@
     function RequestController(UserService, $location, $rootScope, FlashService) {
         var vm = this;
         vm.getQuery = getQuery;
-        vm.numbers = 
+        vm.createRequest = createRequest;
+        vm.numbers 
         vm.state = false
+        vm.state2 = false
 
         function getQuery() {
             // var req = encodeURI(vm.itemtype);
@@ -27,12 +29,18 @@
             }
          
 
-        function createOffer() {
+        function createRequest() {
             vm.dataLoading = true;
-            UserService.CreateOffer(vm.offer)
+            UserService.CreateRequest(vm.request)
                 .then(function (response) {
-                    if (response.success) {
-                        FlashService.Success('Offer created successfully', true);
+                    console.log(response);
+                    console.log(vm.request);
+                    if (response.status == "success") {
+                        FlashService.Success('Request created successfully', true);
+                        vm.involvedUsers = response.involved_users;
+                        vm.reservedAmount = response.reserved_amount;
+                        vm.state2 = true; 
+                        vm.dataLoading = false;
                     } else {
                         FlashService.Error(response.message);
                         vm.dataLoading = false;

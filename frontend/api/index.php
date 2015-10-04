@@ -17,8 +17,6 @@
 	$requestBody = file_get_contents('php://input');
 	$args = json_decode($requestBody, true);
 	
-	
-	
 	$email = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : null;
 	$password = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : null;
 	

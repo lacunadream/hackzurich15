@@ -29,8 +29,12 @@ body {
 	display: block;
 	width: 100%;
 }
+.jumbotron h2:first-of-type.in-app {
+	margin-top: 0.5em;
+}
 
 .centered-button {
+	margin-top: 2em;
 	text-align: center;
 }
 .floating {

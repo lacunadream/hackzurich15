@@ -310,6 +310,7 @@
 	    <td>{{ offer.country }}</td>
 	    <td class="centered-button"><div ng-hide="offer.requested_by !== null" class="btn btn-info" ng-click="vm.deleteOffer(offer.id)">Delete</div>
 		<div ng-show="offer.requested_by !== null">Requested by {{ offer.requested_by }}</div>
+		<a href="{{ offer.website }}" ng-show="offer.website !== null">Link</a>
 		</td>
 	  </tr>
 	</tbody>
