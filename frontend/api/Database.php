@@ -208,7 +208,7 @@
 		
 		
 		private static function hashPassword($password) {
-			return password_hash($password, PASSWORD_BCRYPT); // Changed to stronger bcrypt
+			return sha1($password); // TODO: Use a better (and salted!) hashing function
 		}
 		
 	}

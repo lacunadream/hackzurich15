@@ -303,12 +303,14 @@
         </tr>
     </thead>
 	<tbody>
-	  <tr ng-repeat="offer in vm.offers">
+	  <tr ng-repeat="offer in vm.offers" ng-class="{blocked: offer.requested_by !== null}">
 	    <td>{{ offer.type }}</td>
 	    <td>{{ offer.amount }}</td>
 	    <td>{{ offer.city }}</td>
 	    <td>{{ offer.country }}</td>
-	    <td class="centered-button"><div class="btn btn-info" ng-click="vm.deleteOffer(offer.id)">Delete</div></td>
+	    <td class="centered-button"><div ng-hide="offer.requested_by !== null" class="btn btn-info" ng-click="vm.deleteOffer(offer.id)">Delete</div>
+		<div ng-show="offer.requested_by !== null">Requested by {{ offer.requested_by }}</div>
+		</td>
 	  </tr>
 	</tbody>
 </table>

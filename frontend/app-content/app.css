@@ -46,3 +46,7 @@ body {
 .jumbotron p {
 	font-size: 1.2em;
 }
+
+tr.blocked {
+	background-color: #F0F0F0;
+}

@@ -76,6 +76,17 @@
 			$offers = $this->database->getOffers($this->user['id']);
 			foreach ($offers as &$offer) {
 				unset($offer['user']);
+				
+				if ($offer['requested_by']) {
+					$requester = $this->database->getUserById($offer['requested_by']);
+					
+					if ($requester['type'] == 'organisation') {
+						$offer['requested_by'] = $requester['organisation_name'];
+					} else {
+						$offer['requested_by'] = $requester['first_name'].' '.$requester['last_name'];
+					}
+				}
+				
 			}
 			
 			return $offers;
