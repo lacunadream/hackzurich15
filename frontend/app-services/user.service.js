@@ -13,6 +13,7 @@
         service.GetById = GetById;
         service.GetByUsername = GetByUsername;
         service.Create = Create;
+		service.CreateOrganisation = CreateOrganisation;
         service.GetOffers = GetOffers;
         service.DeleteOffer = DeleteOffer; 
         service.CreateOffer = CreateOffer;
@@ -35,6 +36,10 @@
 
         function Create(user) {
             return $http.post('/api/register/individual', user).then(handleSuccess, handleError('Error creating user'));
+        }
+		
+		function CreateOrganisation(user) {
+            return $http.post('/api/register/organisation', user).then(handleSuccess, handleError('Error creating organisation user'));
         }
 
         function GetOffers() {

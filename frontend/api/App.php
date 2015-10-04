@@ -7,7 +7,7 @@
 		const MAIL_USERNAME = 'hackzurich@netinvasion-mail.ch';
 		const MAIL_PASSWORD = 'ojhfoq3123a!';
 		const MAIL_SENDER_ADDRESS = 'no-reply@codonate.waboodoo.ch';
-		const MAIL_SENDER_NAME = 'Codonate';
+		const MAIL_SENDER_NAME = 'Codonation';
 		const MAIL_SUBJECT = 'Your donated items are needed!';
 		
 		private $database;
@@ -170,7 +170,7 @@
 				$user = $this->database->getUserById($userId);
 				if ($user) {
 					
-					$body = '<h1 style="font-size:1.1em">Codonate</h1>';
+					$body = '<h1 style="font-size:1.1em">Codonation</h1>';
 					if ($user['type'] == 'organisation') {
 						$body .= 'Dear '.$user['organisation_name'];
 					} else {
@@ -206,7 +206,7 @@
 					
 					$body .= 'Please send your items to the address above or contact the requester to arrange some other way of delivery.<br><br>';
 					$body .= 'Thank you for your effort.<br><br>';
-					$body .= 'Kind regards,<br>Codonate';
+					$body .= 'Kind regards,<br>Codonation';
 					
 					Mailer::sendMail(self::MAIL_SENDER_ADDRESS, self::MAIL_SENDER_NAME, $user['email'], self::MAIL_SUBJECT, $body);
 				}
