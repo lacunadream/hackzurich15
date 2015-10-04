@@ -51,6 +51,11 @@
                 controllerAs: 'vm'
             })
 
+            .when('/logout', {
+                controller: 'LogoutController', 
+                controllerAs: 'vm'
+            })
+
             .otherwise({ redirectTo: '/login' });
     }
 
